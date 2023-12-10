@@ -282,7 +282,7 @@ def fake_loss(D_out):
 
     return loss
 
-def plot_imgs():
+def plot_imgs(name):
     z = torch.randn(8, 1, 1, z_size)
     sample_imgs = generator(z).cpu()
 
@@ -296,6 +296,7 @@ def plot_imgs():
         plt.yticks([])
         plt.axis('off')
     plt.show()
+    plt.savefig(f'{name}.png')
 
 def train(D, G, n_epochs, train_on_gpu, print_every=50):
     '''Trains adversarial networks for some number of epochs
@@ -325,7 +326,7 @@ def train(D, G, n_epochs, train_on_gpu, print_every=50):
 
     # epoch training loop
     for epoch in range(n_epochs):
-        plot_imgs()
+        plot_imgs(f"{epoch}")
         # batch training loop
         for batch_i, real_images in enumerate(train_loader):
 
@@ -380,7 +381,7 @@ def train(D, G, n_epochs, train_on_gpu, print_every=50):
                 losses.append((d_loss.item(), g_loss.item()))
                 # print discriminator and generator loss
                 print(f'Epoch [{epoch + 1}/{n_epochs}] | d_loss: {d_loss.item()} | g_loss: {g_loss.item()} | batch {batch_i}/{len(train_loader)}')
-                plot_imgs()
+                plot_imgs(f"{epoch}_{batch_i}")
 
         ## AFTER EACH EPOCH##
         # this code assumes your generator is named G, feel free to change the name
